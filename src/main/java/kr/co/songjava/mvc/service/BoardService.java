@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import kr.co.songjava.mvc.domain.Board;
+import kr.co.songjava.mvc.parameter.BoardParameter;
 import kr.co.songjava.mvc.repository.BoardRepository;
 
 /*
@@ -43,7 +44,7 @@ public class BoardService {
 	 * 등록 처리.
 	 * @param board
 	 */
-	public void save(Board parameter) {
+	public void save(BoardParameter parameter) {
 		// 조회하여 리턴된 정보
 		Board board = repository.get(parameter.getBoardSeq());
 		if(board == null) {

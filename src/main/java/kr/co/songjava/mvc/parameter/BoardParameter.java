@@ -9,6 +9,4 @@ public class BoardParameter {
 	private String title;
 	private String contents;
 	
-
-	
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.songjava.mvc.domain.Board;
+import kr.co.songjava.mvc.parameter.BoardParameter;
 import kr.co.songjava.mvc.service.BoardService;
 
 /*
@@ -25,10 +26,10 @@ public interface BoardRepository {
 	Board get(int boardSeq);
 	
 	// 등록
-	void save(Board board);
+	void save(BoardParameter board);
 	
 	// 업데이트
-	void update(Board board);
+	void update(BoardParameter board);
 	
 	// 삭제
 	void delete(int boardSeq);
