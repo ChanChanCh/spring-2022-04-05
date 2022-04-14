@@ -1,15 +1,13 @@
 package kr.co.songjava.mvc.repository;
 
 import java.util.List;
+import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.songjava.mvc.domain.Board;
 import kr.co.songjava.mvc.parameter.BoardParameter;
-import kr.co.songjava.mvc.service.BoardService;
+import kr.co.songjava.mvc.parameter.BoardSearchParameter;
 
 /*
  * 게시판 Repository
@@ -20,13 +18,15 @@ import kr.co.songjava.mvc.service.BoardService;
 public interface BoardRepository {
 	
 	//리스트
-	List<Board> getList();
+	List<Board> getList(BoardSearchParameter parameter);
 	
 	//  단건?
 	Board get(int boardSeq);
 	
 	// 등록
 	void save(BoardParameter board);
+	
+	void saveList(Map<String, Object> paramMap);
 	
 	// 업데이트
 	void update(BoardParameter board);
