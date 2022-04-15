@@ -23,6 +23,8 @@ import io.swagger.annotations.ApiParam;
 import kr.co.songjava.configuration.exception.BaseException;
 import kr.co.songjava.configuration.http.BaseResponse;
 import kr.co.songjava.configuration.http.BaseResponseCode;
+import kr.co.songjava.framework.data.domain.MySQLPageRequest;
+import kr.co.songjava.framework.data.domain.PageRequestParameter;
 import kr.co.songjava.mvc.domain.Board;
 import kr.co.songjava.mvc.parameter.BoardParameter;
 import kr.co.songjava.mvc.parameter.BoardSearchParameter;
@@ -45,14 +47,18 @@ public class BoardController { // 1-1. 이렇게 RequestMapping을 달아주면 
 
 	/**
 	 * 목록 리턴.
-	 * 
+	 * @param parameter
+	 * @param pageable
 	 * @return
 	 */
 	@GetMapping // 1-2. 이부분이 실행되게 된다
 	@ApiOperation(value = "목록 조회", notes = "게시물 목록 정보를 조회할 수 있습니다.")
-	public BaseResponse<List<Board>> getList(@ApiParam BoardSearchParameter parameter) {
-		logger.info("getList");
-		return new BaseResponse<List<Board>>(boardService.getList(parameter));
+	public BaseResponse<List<Board>> getList(
+			@ApiParam BoardSearchParameter parameter,
+			@ApiParam MySQLPageRequest pageRequest) {
+		logger.info("pageRequest : {}", pageRequest);
+		PageRequestParameter<BoardSearchParameter> pageRequestParameter = new PageRequestParameter<BoardSearchParameter>(pageRequest, parameter);
+		return new BaseResponse<List<Board>>(boardService.getList(pageRequestParameter));
 	}
 
 	// 프론트엔드 개발자에게 데이터를 보낼때 상위에 하나의 BaseResponse라는 클래스를 만들어 씌우고 그안에 제네릭으로 데이터를 받는다

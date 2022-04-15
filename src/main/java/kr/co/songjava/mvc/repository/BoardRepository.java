@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
+import kr.co.songjava.framework.data.domain.PageRequestParameter;
 import kr.co.songjava.mvc.domain.Board;
 import kr.co.songjava.mvc.parameter.BoardParameter;
 import kr.co.songjava.mvc.parameter.BoardSearchParameter;
@@ -18,7 +19,7 @@ import kr.co.songjava.mvc.parameter.BoardSearchParameter;
 public interface BoardRepository {
 	
 	//리스트
-	List<Board> getList(BoardSearchParameter parameter);
+	List<Board> getList(PageRequestParameter<BoardSearchParameter> pageRequestParameter);
 	
 	//  단건?
 	Board get(int boardSeq);
