@@ -25,6 +25,7 @@ import kr.co.songjava.configuration.http.BaseResponse;
 import kr.co.songjava.configuration.http.BaseResponseCode;
 import kr.co.songjava.framework.data.domain.MySQLPageRequest;
 import kr.co.songjava.framework.data.domain.PageRequestParameter;
+import kr.co.songjava.framework.data.web.bind.annotation.RequestConfig;
 import kr.co.songjava.mvc.domain.Board;
 import kr.co.songjava.mvc.parameter.BoardParameter;
 import kr.co.songjava.mvc.parameter.BoardSearchParameter;
@@ -85,6 +86,7 @@ public class BoardController { // 1-1. 이렇게 RequestMapping을 달아주면 
 	 * @param parameter
 	 */
 	@PutMapping
+	@RequestConfig
 	@ApiOperation(value = "등록 / 수정 처리", notes = "신규 게시물 저장 및 기존 게시물 업데이트가 가능합니다.")
 	@ApiImplicitParams({ @ApiImplicitParam(name = "boardSeq", value = "게시물 번호", example = "1"),
 			@ApiImplicitParam(name = "title", value = "제목", example = "spring"),
