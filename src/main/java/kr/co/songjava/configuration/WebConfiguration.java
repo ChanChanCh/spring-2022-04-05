@@ -65,6 +65,11 @@ public class WebConfiguration implements WebMvcConfigurer {
 		jsonView.setObjectMapper(objectMapper());
 		return jsonView;
 	}
+	
+	@Bean
+	public GlobalConfig config( ) {
+		return new GlobalConfig();
+	}
 
 	@Override // addInterceptors를 오버라이드하여 레지스트리에 addInterceptor 메소드를 통해 Bean으로 등록한 메소드들을 콜해서
 				// 인터셉터를 추가하는 과정
