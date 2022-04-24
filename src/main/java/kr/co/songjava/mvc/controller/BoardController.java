@@ -34,7 +34,7 @@ import kr.co.songjava.mvc.service.BoardService;
 /**
  * 게시판 컨트롤러
  * 
- * @author 송자바
+ * @author root
  */
 @RestController
 @RequestMapping("/board")
@@ -86,7 +86,7 @@ public class BoardController { // 1-1. 이렇게 RequestMapping을 달아주면 
 	 * @param parameter
 	 */
 	@PutMapping
-	@RequestConfig
+	@RequestConfig(loginCheck = false)
 	@ApiOperation(value = "등록 / 수정 처리", notes = "신규 게시물 저장 및 기존 게시물 업데이트가 가능합니다.")
 	@ApiImplicitParams({ @ApiImplicitParam(name = "boardSeq", value = "게시물 번호", example = "1"),
 			@ApiImplicitParam(name = "title", value = "제목", example = "spring"),
