@@ -30,7 +30,7 @@
 
 <div class="container">
 	<h2>게시물 목록</h2>
-	<from action="" method="get">
+	<form action="" method="get">
 	<div class="mb-3 row">
 		<label for="exampleFormControlInput1" class="col-sm-2 col-form-label">종류</label>
 		<div class="col-sm-10">
@@ -40,7 +40,7 @@
 	<div class="mb-3 text-center">
 		<button type="submit" class="btn btn-primary">검색하기</button>
 	</div>
-	</from>
+	</form>
 </div>
 	<table class="table caption-top">
 
