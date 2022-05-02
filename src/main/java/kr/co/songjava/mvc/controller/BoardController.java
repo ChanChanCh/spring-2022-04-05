@@ -7,19 +7,21 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import kr.co.songjava.configuration.exception.BaseException;
 import kr.co.songjava.configuration.http.BaseResponse;
 import kr.co.songjava.configuration.http.BaseResponseCode;
@@ -36,7 +38,7 @@ import kr.co.songjava.mvc.service.BoardService;
  * 
  * @author root
  */
-@RestController
+@Controller
 @RequestMapping("/board")
 @Api(tags = "게시판 API")
 public class BoardController { // 1-1. 이렇게 RequestMapping을 달아주면 /board를 쳤을때
@@ -52,43 +54,79 @@ public class BoardController { // 1-1. 이렇게 RequestMapping을 달아주면 
 	 * @param pageable
 	 * @return
 	 */
-	@GetMapping // 1-2. 이부분이 실행되게 된다
-	@ApiOperation(value = "목록 조회", notes = "게시물 목록 정보를 조회할 수 있습니다.")
-	public BaseResponse<List<Board>> getList(
-			@ApiParam BoardSearchParameter parameter,
-			@ApiParam MySQLPageRequest pageRequest) {
+	@GetMapping ("/list")
+	public void list(BoardSearchParameter parameter, MySQLPageRequest pageRequest, Model model) {
 		logger.info("pageRequest : {}", pageRequest);
 		PageRequestParameter<BoardSearchParameter> pageRequestParameter = new PageRequestParameter<BoardSearchParameter>(pageRequest, parameter);
-		return new BaseResponse<List<Board>>(boardService.getList(pageRequestParameter));
+		List<Board> boardList = boardService.getList(pageRequestParameter);
+		model.addAttribute("boardList", boardList);
 	}
 
 	// 프론트엔드 개발자에게 데이터를 보낼때 상위에 하나의 BaseResponse라는 클래스를 만들어 씌우고 그안에 제네릭으로 데이터를 받는다
 	/**
-	 * 상세 정보 리턴.
+	 * 상세 페이지.
 	 * 
 	 * @param boardSeq
+	 * @param model
 	 * @return
 	 */
 	@GetMapping("/{boardSeq}") // 2.1 /board/0 을 입력하면 boardSeq 0번째 가 실행됨
-	@ApiOperation(value = "상세 조회", notes = "게시물 번호에 해당하는 상세 정보를 조회할 수 있습니다.")
-	@ApiImplicitParams({ @ApiImplicitParam(name = "boardSeq", value = "게시물 번호", example = "1") })
-	public BaseResponse<Board> get(@PathVariable int boardSeq) {
+	public String detail(@PathVariable int boardSeq, Model model) {
 		Board board = boardService.get(boardSeq);
 		if (board == null) {
 			throw new BaseException(BaseResponseCode.DATA_IS_NULL, new String[] { "게시물" });
 		}
-		return new BaseResponse<Board>(boardService.get(boardSeq));
+		model.addAttribute("board",board);
+		return "/board/detail";
 	}
 
+	/**
+	 * 등록 화면.
+	 * 
+	 * @param parameter
+	 * @param model
+	 */
+	
+	@GetMapping("/form")
+	@RequestConfig(loginCheck = false)
+	public void form(BoardParameter parameter, Model model) {
+		model.addAttribute("parameter", parameter);
+	}
+	
+	
+	/**
+	 * 수정 화면.
+	 * 
+	 * @param parameter
+	 * @param model
+	 */
+	
+	@GetMapping("/edit/{boardSeq}")
+	@RequestConfig(loginCheck = false)
+	public  String edit(@PathVariable(required = true) int boardSeq, BoardParameter parameter, Model model) {
+			Board board = boardService.get(parameter.getBoardSeq());
+			// null 처리
+			if (board == null) {
+				throw new BaseException(BaseResponseCode.DATA_IS_NULL, new String[] { "게시물" });
+			}
+			model.addAttribute("board", board);
+			model.addAttribute("parameter", parameter);
+			return "/board/form";
+	}
+	
+	
+	
 	/**
 	 * 등록/수정 처리.
 	 * 
 	 * @param parameter
 	 */
-	@PutMapping
+	@PostMapping("/save")
 	@RequestConfig(loginCheck = false)
+	@ResponseBody
 	@ApiOperation(value = "등록 / 수정 처리", notes = "신규 게시물 저장 및 기존 게시물 업데이트가 가능합니다.")
-	@ApiImplicitParams({ @ApiImplicitParam(name = "boardSeq", value = "게시물 번호", example = "1"),
+	@ApiImplicitParams({ 
+			@ApiImplicitParam(name = "boardSeq", value = "게시물 번호", example = "1"),
 			@ApiImplicitParam(name = "title", value = "제목", example = "spring"),
 			@ApiImplicitParam(name = "contents", value = "내용", example = "spring 강좌"), })
 	public BaseResponse<Integer> save(BoardParameter parameter) {

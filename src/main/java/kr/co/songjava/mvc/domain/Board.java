@@ -6,6 +6,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
 
+
+/**
+ * 게시물
+ * @author root
+ *
+ */
+
+
 @Data
 public class Board {
 
@@ -13,6 +21,7 @@ public class Board {
 	private BoardType boardType;
 	private String title;
 	private String contents;
+	private int viewCount;
 	private Date regDate;
 	private boolean delYn;
 	
